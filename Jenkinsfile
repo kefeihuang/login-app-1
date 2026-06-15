@@ -19,13 +19,11 @@ pipeline {
                 // Otherwise, delete the 'dir' block if Jenkins is pulling directly from Git
                 dir('C:/Users/kefei/Desktop/Study2026/JenkinsTutorial_1/login-app-1') {
                     echo 'Workspace ready. Checking project files...'
-		git branch: "${GIT_BRANCH}",
+					git branch: "${GIT_BRANCH}",
                     url: "${GIT_REPO}"
-
                 }
             }
         }
-
 
         stage('Verify Environment') {
             steps {
@@ -36,10 +34,10 @@ pipeline {
             }
         }
 
-        stage('Clean & Compile') {
+        stage('Clean') {
             steps {
                 dir('C:/Users/kefei/Desktop/Study2026/MyAndroidApp1') {
-                    echo 'Cleaning old build artifacts and building APKs...'
+                    echo 'Cleaning old build artifacts...'
                     // Using native Windows bat command completely avoids PowerShell script parsing errors
                     bat 'gradlew.bat clean'
                 }
@@ -63,7 +61,7 @@ pipeline {
                     
                     // 1. Verify the device can actually see the newly installed test runner
                     powershell 'adb shell pm list instrumentation'
-                    bat '"%ANDROID_HOME%/platform-tools/adb.exe" shell pm list instrumentation'
+                    //bat '"%ANDROID_HOME%/platform-tools/adb.exe" shell pm list instrumentation'
                     
                     // 2. Execute the test runner using the correct package suffix format (.test)
                     // The "-w" flag forces Jenkins to wait until the tests fully complete before moving on
