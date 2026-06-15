@@ -5,7 +5,7 @@ pipeline {
         GIT_REPO = 'https://github.com/kefeihuang/login-app-1.git'
         GIT_BRANCH = 'master'
 
-// Define your Android SDK path explicitly so Gradle knows where tools are
+		// Define your Android SDK path explicitly so Gradle knows where tools are
         ANDROID_HOME = 'C:/Users/kefei/AppData/Local/Android/Sdk'
         // Specify your target package and test runner configurations
         MAIN_PACKAGE = 'com.example.loginapp1'
