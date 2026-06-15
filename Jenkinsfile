@@ -76,7 +76,7 @@ pipeline {
 
     post {
         always {
-            bat './gradlew :app:createAggregatedTestReport'
+            // bat './gradlew :app:createAggregatedTestReport'
 			powershell 'adb uninstall com.example.loginapp1'
             powershell 'adb uninstall com.example.loginapp1.test'
             echo 'Pipeline finished processing. Archiving execution logs...'

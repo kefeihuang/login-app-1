@@ -15,7 +15,10 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 public class Base {
 
@@ -25,6 +28,28 @@ public class Base {
     protected static String packageName;
     private static final String className = Base.class.getSimpleName();
     protected static MainPage mMainPage;
+
+    @Rule
+    public TestWatcher watcher = new TestWatcher() {
+        @Rule
+        public TestWatcher watcher = new TestWatcher() {
+            @Override
+            protected void starting(Description description) {
+                System.out.println("Starting: " + description.getMethodName());
+            }
+
+            @Override
+            protected void succeeded(Description description) {
+                System.out.println("Passed: " + description.getMethodName());
+            }
+
+            @Override
+            protected void failed(Throwable e, Description description) {
+                System.out.println("Failed: " + description.getMethodName());
+                e.printStackTrace();
+            }
+        };
+    };
 
     public static void setUp() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
