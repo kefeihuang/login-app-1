@@ -17,7 +17,7 @@ public class MainPage extends Base{
     protected UiObject2 textField;
     protected UiObject2 nextButton;
     protected UiObject2 toastButton;
-    private static final String TAG = "KEFEI " + MainPage.class.getSimpleName();
+    private static final String TAG = "KEFEI" + MainPage.class.getSimpleName();
 
     MainPage() {
         className = getClass().getSimpleName();

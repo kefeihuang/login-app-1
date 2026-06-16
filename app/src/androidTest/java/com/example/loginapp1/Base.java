@@ -28,22 +28,26 @@ public class Base {
     protected static String packageName;
     private static final String className = Base.class.getSimpleName();
     protected static MainPage mMainPage;
+    private static final String TAG = "KEFEI";
 
     @Rule
     public TestWatcher watcher = new TestWatcher() {
         @Override
         protected void starting(Description description) {
-            System.out.println("Starting: " + description.getMethodName());
+            // System.out.println("Starting: " + description.getMethodName());
+            Log.d(TAG, "Starting: " + description.getMethodName());
         }
 
         @Override
         protected void succeeded(Description description) {
-            System.out.println("Passed: " + description.getMethodName());
+            // System.out.println("Passed: " + description.getMethodName());
+            Log.d(TAG, "Passed: " + description.getMethodName());
         }
 
         @Override
         protected void failed(Throwable e, Description description) {
-            System.out.println("Failed: " + description.getMethodName());
+            // System.out.println("Failed: " + description.getMethodName());
+            Log.d(TAG, "Failed: " + description.getMethodName());
             e.printStackTrace();
         }
     };
