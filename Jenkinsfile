@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                dir('%PROJECT_HOME%') {
+                dir(%PROJECT_HOME%) {
 					echo 'Move to project directory...'
             }
         }
