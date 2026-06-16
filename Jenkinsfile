@@ -44,49 +44,42 @@ pipeline {
             }
         }
 
-        stage('Clean') {
-            steps {
-                
-                    echo 'Cleaning old build artifacts...'
-                    // Using native Windows bat command completely avoids PowerShell script parsing errors
-                    bat 'gradlew.bat clean'
-                
-            }
-        }
-
 		stage('Check Device') {
 			steps {
 				powershell 'adb devices'
 			}
 		}
+		
+        stage('Clean') {
+            steps {
+                echo 'Cleaning old build artifacts...'
+                // Using native Windows bat command completely avoids PowerShell script parsing errors
+                bat 'gradlew.bat clean'
+            }
+        }
 
         stage('Install Apps') {
             steps {
-                
-                    echo 'Deploying Main APK and Test APK to target device...'
-                    // This forces BOTH required APK files onto the active device
-                    bat 'gradlew.bat installDebug installDebugAndroidTest'
-                
+                echo 'Deploying Main APK and Test APK to target device...'
+                // This forces BOTH required APK files onto the active device
+                bat 'gradlew.bat installDebug installDebugAndroidTest'
             }
         }
 
         stage('Run Instrumentation Tests') {
             steps {
-                
-                    echo 'Launching Android Test Runner execution loop...'
+                echo 'Launching Android Test Runner execution loop...'
+                // 1. Verify the device can actually see the newly installed test runner
+                powershell 'adb shell pm list instrumentation'
+                //bat '"%ANDROID_HOME%/platform-tools/adb.exe" shell pm list instrumentation'
                     
-                    // 1. Verify the device can actually see the newly installed test runner
-                    powershell 'adb shell pm list instrumentation'
-                    //bat '"%ANDROID_HOME%/platform-tools/adb.exe" shell pm list instrumentation'
-                    
-					powershell 'adb logcat -c'
+				powershell 'adb logcat -c'
 					
-                    // 2. Execute the test runner using the correct package suffix format (.test)
-                    // The "-w" flag forces Jenkins to wait until the tests fully complete before moving on
-                    bat 'gradlew.bat connectedDebugAndroidTest --info'
-					// powershell 'adb shell am instrument -w -e class com.example.loginapp1.ExampleInstrumentedTest com.example.loginapp1.test/androidx.test.runner.AndroidJUnitRunner'
-                    // bat '"%ANDROID_HOME%/platform-tools/adb.exe" shell am instrument -w -e class ${MAIN_PACKAGE}.ExampleInstrumentedTest ${MAIN_PACKAGE}.test/${TEST_RUNNER}'
-                
+                // 2. Execute the test runner using the correct package suffix format (.test)
+                // The "-w" flag forces Jenkins to wait until the tests fully complete before moving on
+                bat 'gradlew.bat connectedDebugAndroidTest --info'
+				// powershell 'adb shell am instrument -w -e class com.example.loginapp1.ExampleInstrumentedTest com.example.loginapp1.test/androidx.test.runner.AndroidJUnitRunner'
+                // bat '"%ANDROID_HOME%/platform-tools/adb.exe" shell am instrument -w -e class ${MAIN_PACKAGE}.ExampleInstrumentedTest ${MAIN_PACKAGE}.test/${TEST_RUNNER}'
             }
         }
     }
