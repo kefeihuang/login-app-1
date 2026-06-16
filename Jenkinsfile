@@ -67,7 +67,8 @@ pipeline {
 					
                     // 2. Execute the test runner using the correct package suffix format (.test)
                     // The "-w" flag forces Jenkins to wait until the tests fully complete before moving on
-                    powershell 'adb shell am instrument -w -e class com.example.loginapp1.ExampleInstrumentedTest com.example.loginapp1.test/androidx.test.runner.AndroidJUnitRunner'
+                    bat 'gradlew.bat connectedDebugAndroidTest --info'
+					// powershell 'adb shell am instrument -w -e class com.example.loginapp1.ExampleInstrumentedTest com.example.loginapp1.test/androidx.test.runner.AndroidJUnitRunner'
                     // bat '"%ANDROID_HOME%/platform-tools/adb.exe" shell am instrument -w -e class ${MAIN_PACKAGE}.ExampleInstrumentedTest ${MAIN_PACKAGE}.test/${TEST_RUNNER}'
                 }
             }
@@ -77,6 +78,7 @@ pipeline {
     post {
         always {
             // bat './gradlew :app:createAggregatedTestReport'
+			powershell 'adb logcat -d | findstr KEFEI'
 			powershell 'adb uninstall com.example.loginapp1'
             powershell 'adb uninstall com.example.loginapp1.test'
             echo 'Pipeline finished processing. Archiving execution logs...'
