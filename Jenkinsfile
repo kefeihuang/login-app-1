@@ -5,6 +5,8 @@ pipeline {
         GIT_REPO = 'https://github.com/kefeihuang/login-app-1.git'
         GIT_BRANCH = 'master'
 
+		PROJECT_HOME = 'C:/Users/kefei/Desktop/Study2026/JenkinsTutorial_1/login-app-1'
+
 		// Define your Android SDK path explicitly so Gradle knows where tools are
         ANDROID_HOME = 'C:/Users/kefei/AppData/Local/Android/Sdk'
         // Specify your target package and test runner configurations
@@ -13,15 +15,21 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Prepare') {
+            steps {
+                dir('%PROJECT_HOME%')
+            }
+        }
+		
+		stage('Checkout Code') {
             steps {
                 // If this is a local sandbox project, navigate to your desktop directory
                 // Otherwise, delete the 'dir' block if Jenkins is pulling directly from Git
-                dir('C:/Users/kefei/Desktop/Study2026/JenkinsTutorial_1/login-app-1') {
+                
                     echo 'Workspace ready. Checking project files...'
 					git branch: "${GIT_BRANCH}",
                     url: "${GIT_REPO}"
-                }
+                
             }
         }
 
@@ -36,27 +44,33 @@ pipeline {
 
         stage('Clean') {
             steps {
-                dir('C:/Users/kefei/Desktop/Study2026/MyAndroidApp1') {
+                
                     echo 'Cleaning old build artifacts...'
                     // Using native Windows bat command completely avoids PowerShell script parsing errors
                     bat 'gradlew.bat clean'
-                }
+                
             }
         }
 
+		stage('Check Device') {
+			steps {
+				powershell 'adb devices'
+			}
+		}
+
         stage('Install Apps') {
             steps {
-                dir('C:/Users/kefei/Desktop/Study2026/MyAndroidApp1') {
+                
                     echo 'Deploying Main APK and Test APK to target device...'
                     // This forces BOTH required APK files onto the active device
                     bat 'gradlew.bat installDebug installDebugAndroidTest'
-                }
+                
             }
         }
 
         stage('Run Instrumentation Tests') {
             steps {
-                dir('C:/Users/kefei/Desktop/Study2026/MyAndroidApp1') {
+                
                     echo 'Launching Android Test Runner execution loop...'
                     
                     // 1. Verify the device can actually see the newly installed test runner
@@ -70,7 +84,7 @@ pipeline {
                     bat 'gradlew.bat connectedDebugAndroidTest --info'
 					// powershell 'adb shell am instrument -w -e class com.example.loginapp1.ExampleInstrumentedTest com.example.loginapp1.test/androidx.test.runner.AndroidJUnitRunner'
                     // bat '"%ANDROID_HOME%/platform-tools/adb.exe" shell am instrument -w -e class ${MAIN_PACKAGE}.ExampleInstrumentedTest ${MAIN_PACKAGE}.test/${TEST_RUNNER}'
-                }
+                
             }
         }
     }
