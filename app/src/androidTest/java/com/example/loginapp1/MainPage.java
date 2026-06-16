@@ -17,6 +17,7 @@ public class MainPage extends Base{
     protected UiObject2 textField;
     protected UiObject2 nextButton;
     protected UiObject2 toastButton;
+    private static final String TAG = "KEFEI " + MainPage.class.getSimpleName();
 
     MainPage() {
         className = getClass().getSimpleName();
@@ -29,6 +30,7 @@ public class MainPage extends Base{
 
     public void verifyNextButton() {
         Log.d("KefeiLog " + className, "verifyNextButton");
+        System.out.println("verifyNextButton");
         nextButton = device.findObject(By.res("com.example.loginapp1:id/buttonNext"));
         String buttonText = nextButton.getText();
         Log.d("KefeiLog " + className, buttonText);
