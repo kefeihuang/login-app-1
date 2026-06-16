@@ -31,24 +31,21 @@ public class Base {
 
     @Rule
     public TestWatcher watcher = new TestWatcher() {
-        @Rule
-        public TestWatcher watcher = new TestWatcher() {
-            @Override
-            protected void starting(Description description) {
-                System.out.println("Starting: " + description.getMethodName());
-            }
+        @Override
+        protected void starting(Description description) {
+            System.out.println("Starting: " + description.getMethodName());
+        }
 
-            @Override
-            protected void succeeded(Description description) {
-                System.out.println("Passed: " + description.getMethodName());
-            }
+        @Override
+        protected void succeeded(Description description) {
+            System.out.println("Passed: " + description.getMethodName());
+        }
 
-            @Override
-            protected void failed(Throwable e, Description description) {
-                System.out.println("Failed: " + description.getMethodName());
-                e.printStackTrace();
-            }
-        };
+        @Override
+        protected void failed(Throwable e, Description description) {
+            System.out.println("Failed: " + description.getMethodName());
+            e.printStackTrace();
+        }
     };
 
     public static void setUp() {
